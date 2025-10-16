@@ -246,9 +246,12 @@ export class Evaluator {
    * Evaluate enum access (EnumName::value).
    * @private
    */
-  private evaluateEnumAccess(_enumName: string, _value: string, _context: Context): unknown {
-    // TODO: Implement enum lookup
-    throw new ParseError("Enum access not yet implemented");
+  private evaluateEnumAccess(enumName: string, valueName: string, context: Context): unknown {
+    const value = context.getEnumValue(enumName, valueName);
+    if (value === undefined) {
+      throw new ParseError(`Enum value "${enumName}::${valueName}" not found`);
+    }
+    return value;
   }
 
   /**
