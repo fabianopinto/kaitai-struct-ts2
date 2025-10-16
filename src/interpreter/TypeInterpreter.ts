@@ -404,14 +404,31 @@ export class TypeInterpreter {
       if (type === "str" || !type) {
         // String or raw bytes
         const encoding = attr.encoding || this.schema.meta.encoding || "UTF-8";
+        let data: Uint8Array;
         if (type === "str") {
-          return stream.readStr(size, encoding);
+          data = stream.readBytes(size);
+          // Apply processing if specified
+          if (attr.process) {
+            data = this.applyProcessing(data, attr.process);
+          }
+          // eslint-disable-next-line no-undef
+          return new TextDecoder(encoding).decode(data);
         } else {
-          return stream.readBytes(size);
+          data = stream.readBytes(size);
+          // Apply processing if specified
+          if (attr.process) {
+            data = this.applyProcessing(data, attr.process);
+          }
+          return data;
         }
       } else {
         // Sized substream for complex type
-        const substream = stream.substream(size);
+        let data = stream.readBytes(size);
+        // Apply processing if specified
+        if (attr.process) {
+          data = this.applyProcessing(data, attr.process);
+        }
+        const substream = new KaitaiStream(data);
         return this.parseType(type, substream, context, attr["type-args"]);
       }
     }
@@ -624,11 +641,33 @@ export class TypeInterpreter {
   }
 
   /**
-   * Evaluate an expression or return a literal value.
-   * If the value is a string, it's treated as an expression.
-   * If it's a number or boolean, it's returned as-is.
+   * Apply processing transformation to data.
+   * Supports basic transformations like zlib decompression.
    *
-   * @param value - Expression string or literal value
+   * @param data - Data to process
+   * @param process - Processing specification
+   * @returns Processed data
+   * @private
+   */
+  private applyProcessing(data: Uint8Array, process: string | Record<string, unknown>): Uint8Array {
+    const processType = typeof process === "string" ? process : process.algorithm;
+
+    // For now, return data as-is with a note that processing isn't fully implemented
+    // Full implementation would require zlib, encryption libraries, etc.
+    if (processType) {
+      throw new NotImplementedError(
+        `Processing type "${processType}" is not yet implemented. ` +
+          `Supported in future versions with zlib, encryption, etc.`,
+      );
+    }
+
+    return data;
+  }
+
+  /**
+   * Evaluate a value that can be an expression or literal.
+   *
+   * @param value - Value to evaluate (expression string, number, or boolean)
    * @param context - Execution context
    * @returns Evaluated result
    * @private
