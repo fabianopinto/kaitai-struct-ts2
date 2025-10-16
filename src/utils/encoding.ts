@@ -53,7 +53,7 @@ export function decodeString(bytes: Uint8Array, encoding: string): string {
       if (typeof TextDecoder !== "undefined") {
         try {
           return new TextDecoder(encoding).decode(bytes);
-        } catch (e) {
+        } catch {
           throw new Error(`Unsupported encoding: ${encoding}`);
         }
       }

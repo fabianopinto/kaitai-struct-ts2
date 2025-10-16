@@ -333,7 +333,9 @@ export class ExpressionParser {
           }
 
           this.expect(TokenType.RPAREN, "Expected ) after arguments");
-          expr = createMethodCall((expr as any).object, (expr as any).property, args);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const memberExpr = expr as any;
+          expr = createMethodCall(memberExpr.object, memberExpr.property, args);
         } else {
           break;
         }
