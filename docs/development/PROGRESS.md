@@ -1,7 +1,7 @@
 # Project Progress
 
 **Last Updated:** 2025-10-02
-**Current Phase:** Phase 4 - Advanced Features (In Progress)
+**Current Phase:** Phase 3 - Advanced Features (In Progress)
 **Overall Completion:** ~85%
 
 ## Summary
@@ -232,7 +232,7 @@ This document tracks the progress of the kaitai-struct-ts project, a runtime int
 
 ## Current Work
 
-### 🔄 Phase 4 - Remaining Features
+### 🔄 Phase 3 - Remaining Features
 
 **Priority:** Complete advanced features for v1.0.0
 
@@ -247,7 +247,7 @@ This document tracks the progress of the kaitai-struct-ts project, a runtime int
 
 ## Pending Work
 
-### 📋 Phase 4 - Advanced Features (Remaining)
+### 📋 Phase 3 - Advanced Features (Remaining)
 
 - [ ] **Substreams and Processing**
   - process attribute for transformations
