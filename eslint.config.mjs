@@ -12,7 +12,14 @@ export default [
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: "module",
-        project: "./tsconfig.json",
+      },
+      globals: {
+        // Node.js globals
+        Buffer: "readonly",
+        console: "readonly",
+        process: "readonly",
+        __dirname: "readonly",
+        __filename: "readonly",
       },
     },
     plugins: {
