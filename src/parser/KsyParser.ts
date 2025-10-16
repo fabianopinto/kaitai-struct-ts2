@@ -7,7 +7,7 @@
 
 import { parse as parseYaml } from "yaml";
 import { ParseError, ValidationError as KaitaiValidationError } from "../utils/errors";
-import type { KsySchema, ValidationResult, ValidationError, ValidationWarning } from "./schema.ts";
+import type { KsySchema, ValidationResult, ValidationError, ValidationWarning } from "./schema";
 
 /**
  * Parser for Kaitai Struct YAML (.ksy) format definitions.
@@ -60,6 +60,7 @@ export class KsyParser {
 
       // Log warnings if any
       if (result.warnings.length > 0 && !strict) {
+        // eslint-disable-next-line no-undef
         console.warn(
           "Schema validation warnings:",
           result.warnings.map((w) => w.message),
