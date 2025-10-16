@@ -6,6 +6,7 @@
  */
 
 import type { KaitaiStream } from "../stream";
+import type { EnumSpec } from "../parser/schema";
 
 /**
  * Execution context for parsing operations.
@@ -27,20 +28,28 @@ export class Context {
   /** Current object being parsed */
   private _current: Record<string, unknown> = {};
 
+  /** Enum definitions from schema */
+  private _enums: Record<string, EnumSpec> = {};
+
   /**
    * Create a new execution context.
    *
    * @param _io - Binary stream being read
    * @param _root - Root object of the parse tree
    * @param _parent - Parent object (optional)
+   * @param enums - Enum definitions from schema (optional)
    */
   constructor(
     private _io: KaitaiStream,
     private _root: unknown = null,
     _parent: unknown = null,
+    enums?: Record<string, EnumSpec>,
   ) {
     if (_parent !== null) {
       this.parentStack.push(_parent);
+    }
+    if (enums) {
+      this._enums = enums;
     }
   }
 
@@ -153,6 +162,44 @@ export class Context {
   }
 
   /**
+   * Get enum value by name.
+   * Used for enum access in expressions (EnumName::value).
+   *
+   * @param enumName - Name of the enum
+   * @param valueName - Name of the enum value
+   * @returns Enum value (number) or undefined
+   */
+  getEnumValue(enumName: string, valueName: string): unknown {
+    const enumDef = this._enums[enumName];
+    if (!enumDef) {
+      return undefined;
+    }
+
+    // Enum definitions map integer values to string names
+    // e.g., { 0: "unknown", 1: "text" }
+    // We need to reverse-lookup: given "text", return 1
+    for (const [key, value] of Object.entries(enumDef)) {
+      if (value === valueName) {
+        // Convert key to number
+        const numKey = Number(key);
+        return isNaN(numKey) ? key : numKey;
+      }
+    }
+
+    return undefined;
+  }
+
+  /**
+   * Check if an enum exists.
+   *
+   * @param enumName - Name of the enum
+   * @returns True if enum exists
+   */
+  hasEnum(enumName: string): boolean {
+    return enumName in this._enums;
+  }
+
+  /**
    * Create a child context for nested parsing.
    * The current object becomes the parent in the child context.
    *
@@ -164,6 +211,7 @@ export class Context {
       stream || this._io,
       this._root || this._current,
       this._current,
+      this._enums,
     );
     return childContext;
   }
@@ -175,7 +223,7 @@ export class Context {
    * @returns Cloned context
    */
   clone(): Context {
-    const cloned = new Context(this._io, this._root, this.parent);
+    const cloned = new Context(this._io, this._root, this.parent, this._enums);
     cloned._current = { ...this._current };
     cloned.parentStack = [...this.parentStack];
     return cloned;
