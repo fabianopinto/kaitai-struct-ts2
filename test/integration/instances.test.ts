@@ -208,8 +208,8 @@ types:
 
       expect(result.header_offset).toBe(5);
       expect(result.header).toHaveProperty("magic");
-      expect((result.header as any).magic).toBe(0x5a4d);
-      expect((result.header as any).version).toBe(0x01);
+      expect((result.header as unknown as Record<string, unknown>).magic).toBe(0x5a4d);
+      expect((result.header as unknown as Record<string, unknown>).version).toBe(0x01);
     });
   });
 
