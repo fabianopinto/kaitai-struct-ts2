@@ -57,7 +57,7 @@ export type {
   ValidationResult,
   ValidationError as SchemaValidationError,
   ValidationWarning,
-} from "./parser/schema.ts";
+} from "./parser/schema";
 
 export {
   BUILTIN_TYPES,

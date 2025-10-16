@@ -61,6 +61,7 @@ export class Evaluator {
         return this.evaluateEnumAccess(n.enumName, n.value, context);
 
       default:
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         throw new ParseError(`Unknown AST node kind: ${(node as any).kind}`);
     }
   }

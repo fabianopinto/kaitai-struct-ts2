@@ -7,7 +7,7 @@
 
 import { KaitaiStream } from "../stream";
 import { ParseError, ValidationError, NotImplementedError } from "../utils/errors";
-import type { KsySchema, AttributeSpec, Endianness } from "../parser/schema.ts";
+import type { KsySchema, AttributeSpec, Endianness } from "../parser/schema";
 import {
   isBuiltinType,
   getTypeEndianness,
@@ -17,6 +17,7 @@ import {
   isStringType,
 } from "../parser/schema";
 import { Context } from "./Context";
+// import { evaluateExpression } from '../expression' // TODO: Integrate expression evaluation
 
 /**
  * Interprets Kaitai Struct schemas and parses binary data.
@@ -39,7 +40,11 @@ export class TypeInterpreter {
    */
   constructor(
     private schema: KsySchema,
-    private parentMeta?: { id: string; endian?: Endianness | object; encoding?: string },
+    private parentMeta?: {
+      id: string;
+      endian?: Endianness | object;
+      encoding?: string;
+    },
   ) {
     // For root schemas, meta.id is required
     // For nested types, we can inherit from parent
