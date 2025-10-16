@@ -1,3 +1,6 @@
+<div align="center">
+  <img src="assets/logo.png" alt="kaitai-struct-ts" width="200"/>
+
 # kaitai-struct-ts
 
 [![npm version](https://badge.fury.io/js/%40k67%2Fkaitai-struct-ts.svg)](https://www.npmjs.com/package/@k67/kaitai-struct-ts)
@@ -6,7 +9,11 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org/)
 
-A **runtime interpreter** for [Kaitai Struct](https://kaitai.io/) binary format definitions in TypeScript.
+**A runtime interpreter for [Kaitai Struct](https://kaitai.io/) binary format definitions in TypeScript.**
+
+</div>
+
+---
 
 Parse any binary data format by providing a `.ksy` (Kaitai Struct YAML) definition file - no compilation step required!
 
